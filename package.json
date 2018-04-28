@@ -1,0 +1,43 @@
+{
+  "name": "rainboots",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "gulp lint",
+    "build-prod": "gulp build-prod",
+    "test": "karma start karma.conf.js --browsers PhantomJS_debug",
+    "test-chrome": "karma start karma.conf.js --browsers Chrome"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silverback78/rainboots.git"
+  },
+  "author": "silverback78",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/silverback78/rainboots/issues"
+  },
+  "homepage": "https://github.com/silverback78/rainboots#readme",
+  "devDependencies": {
+    "angular": "1.6.9",
+    "angular-animate": "1.6.9",
+    "angular-aria": "1.6.9",
+    "angular-material": "1.1.8",
+    "angular-messages": "1.6.9",
+    "angular-mocks": "1.6.9",
+    "angular-route": "1.6.9",
+    "eslint": "4.19.1",
+    "eslint-plugin-angular": "3.3.0",
+    "gulp": "3.9.1",
+    "gulp-cli": "2.0.1",
+    "gulp-eslint": "4.0.2",
+    "jasmine-core": "3.1.0",
+    "karma": "2.0.2",
+    "karma-chrome-launcher": "2.2.0",
+    "karma-cli": "1.0.1",
+    "karma-jasmine": "1.1.1",
+    "karma-ng-html2js-preprocessor": "1.0.0",
+    "karma-phantomjs-launcher": "1.0.4"
+  }
+}

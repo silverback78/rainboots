@@ -1,0 +1,32 @@
+<md-content class="md-padding" hide-xs>
+  <md-nav-bar md-no-ink-bar="disableInkBar" md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+
+    <div ng-repeat="(index, navItem) in vm.navItems">
+        <md-nav-item md-nav-href="{{navItem.href}}" name="{{navItem.name}}">{{navItem.label}}</md-nav-item>
+    </div>
+
+  </md-nav-bar>
+  <span>{{status}}</span>
+
+</md-content>
+
+<md-button class="md-fab md-mini md-primary right static gutter escape-gutter-top" aria-label="Open side nav" ng-click="vm.openSidenav()" hide-gt-xs>
+  <md-icon md-svg-src="icons/hamburger.svg"></md-icon>
+</md-button>
+
+<md-sidenav class="md-sidenav-right md-whiteframe-4dp" md-component-id="right">
+
+  <md-toolbar class="md-theme-light">
+    <h1 class="md-toolbar-tools">rainboots</h1>
+  </md-toolbar>
+
+  <md-menu-content width="4" ng-repeat="(index, navItem) in vm.navItems">
+    <md-menu-item>
+      <md-button ng-click="vm.loadRoute(navItem.name)">
+        {{navItem.label}}
+      </md-button>
+    </md-menu-item>
+  </md-menu-content>
+
+</md-sidenav>
+  

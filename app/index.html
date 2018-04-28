@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" ng-app="rainboots" ng-cloak>
+  <head>
+    <meta charset="utf-8">
+    <title ng-bind="'rainboots &dash; ' + title">rainboots</title>
+    <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="rainboots.css">
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.css">
+  </head>
+  <body>
+
+    <div class="container">
+      <navigation></navigation>
+      <div ng-view></div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.min.js"></script>    
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-messages.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.8/angular-material.min.js"></script>
+
+    <script src="environment.js"></script>
+    <script src="rainboots/rainboots.js"></script>
+    <script src="rainboots/constants.js"></script>
+    <script src="rainboots/routes.js"></script>
+    <script src="rainboots/analytics.js"></script>
+
+    <script src="services/api/api.js"></script>
+    <script src="services/log/log.js"></script>
+
+    <script src="controllers/home/HomeController.js"></script>
+    <script src="controllers/migrations/MigrationsController.js"></script>
+    <script src="controllers/navigation/NavigationController.js"></script>
+
+    <script src="directives/navigation/navigation.js"></script>
+
+  </body>
+</html>

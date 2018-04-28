@@ -1,0 +1,6 @@
+/app/app.environment.js
+/app/spec.environment.js
+/gulpfile.js
+node_modules
+/app/environment.js
+/app/environment.spec.js
