@@ -1,11 +1,13 @@
-<h1>{{vm.title}}</h1>
+<ng-container ng-if="vm.features.migrations.enabled">
+  <h1>{{vm.title}}</h1>
 
-<md-list>
-  <md-list-item class="md-2-line" ng-repeat="item in vm.migrations">
-    <div class="md-list-item-text">
-      <h3>{{item.version}}</h3>
-      <p>{{item.description}}</p>
-    </div>
-    <md-checkbox></md-checkbox>
-  </md-list-item>
-</md-list>
+  <md-list>
+    <md-list-item class="md-2-line" ng-repeat="item in vm.migrations">
+      <div class="md-list-item-text">
+        <h3>{{item.version}}</h3>
+        <p>{{item.description}}</p>
+      </div>
+      <md-checkbox></md-checkbox>
+    </md-list-item>
+  </md-list>
+</ng-container>

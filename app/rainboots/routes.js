@@ -5,7 +5,7 @@
 
 angular.module('rainboots')
 
-  .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
+  .config(['$locationProvider', '$routeProvider', 'features', function($locationProvider, $routeProvider, features) {
     $locationProvider.hashPrefix('');
 
     $routeProvider
@@ -14,16 +14,18 @@ angular.module('rainboots')
         templateUrl: 'controllers/home/HomeController.html',
         controller: 'HomeController',
         controllerAs: 'vm'
-      })
+      });
 
-      .when('/migrations', {
+    if (features.migrations.enabled) {
+      $routeProvider.when('/migrations', {
         title: 'Migrations',
         templateUrl: 'controllers/migrations/MigrationsController.html',
         controller: 'MigrationsController',
         controllerAs: 'vm'
-      })
+      });
+    }
 
-      .otherwise({redirectTo: '/home'});
+    $routeProvider.otherwise({redirectTo: '/home'});
   }])
 
   .run(['$rootScope', function($rootScope) {

@@ -2,22 +2,22 @@
 
 angular.module('rainboots')
 
-  .factory('api', ['$http', '$q', 'constants', 'log', function($http, $q, constants, log) {
-    log.setStack(constants.enums.codeBlocks.factory, 'api');
+  .factory('api', ['$http', '$q', 'enums', 'log', 'environment', function($http, $q, enums, log, env) {
+    log.setStack(enums.codeBlocks.factory, 'api');
     return {
       getMigrations: function () {
-        log.setStack(constants.enums.codeBlocks.factory, ['api', 'getMigrations()']);
+        log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()']);
         var deferred = $q.defer();
 
-        $http.get(constants.apiUrl + '/migrations')
+        $http.get(env.apiUrl + '/migrations')
           .then(
             function(response) {
-              log.setStack(constants.enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.get(' + constants.apiUrl + '/migrations)']);
+              log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.get(' + env.apiUrl + '/migrations)']);
               log.debug('response', response);
               deferred.resolve(response.data);
             },
             function() {
-              log.setStack(constants.enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.get(' + constants.apiUrl + '/migrations)', '$http error callback']);
+              log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.get(' + env.apiUrl + '/migrations)', '$http error callback']);
               log.error('Failed to get migrations');
               deferred.reject('Failed to get migrations');
             }

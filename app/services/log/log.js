@@ -14,7 +14,7 @@ angular.module('rainboots')
    * Description. This object contains all text strings, styles, named items and so on used in log factory.
    **/
   .constant('logServiceConfig', {
-    setStackCalled: 'entered',
+    setStackCalled: 'called',
     severities: {
       debug: 'debug',
       warn: 'warn',
@@ -64,47 +64,70 @@ angular.module('rainboots')
    *              in production environment. It should utilize colors when available and coherently display the
    *              current stack, comment, and any objects associated with the log.
    *
-   * Supoprts the following functions:
+   *              Examples:
+   *
+   *              // With a single level stack as a string
+   *              log.setStack('controller', 'ViewController');
+   *              logs: controller: ViewController -> called
+   *
+   *              // With an array as the stack
+   *              log.setStack('controller', ['ViewController', 'getData()', 'api.getData().then()'])
+   *              logs: controller: ViewController -> getData() -> api.getData().then() -> called
+   *
+   *              // With the stack set, you can log a comment. You can use debug, warn, or error.
+   *              log.debug('Checking to see if data exists');
+   *              logs:  controller: ViewController -> getData() -> api.getData().then() // Checking to see if data exists
+   *
+   *              // You can pass an object as a second parameter to log data
+   *              log.debug('data', data);
+   *              logs:  controller: ViewController -> getData() -> api.getData().then() -> data = { value1: 'One', value2: 'Two' }
    *
    * setStack(string, string|array)
-   *                  sets the current code block and stack for this log. Code block and stack will persist until it is changed.
-   *                  A code block is the type of code block currently running. It can be an angular block such as
-   *                  controller or factory, or a plain javascript code block. It will log an error if you attempt to
-   *                  set a code block not listed in constants.enums.codeBlocks.
+   *              sets the current code block and stack for this log. Code block and stack will persist until it is changed.
+   *              A code block is the type of code block currently running. It can be an angular block such as
+   *              controller or factory, or a plain javascript code block. It will log an error if you attempt to
+   *              set a code block not listed in enums.codeBlocks.
    *
-   *                  @param {string} codeBlock          One of the code blocks from constants.enums.codeBlocks.
-   *                  @param {string|array} stack        A string or an array that makes up the current stack.
-   *                  @return {void}
+   *              @param {string} codeBlock          One of the code blocks from enums.codeBlocks.
+   *              @param {string|array} stack        A string or an array that makes up the current stack.
+   *              @return {void}
    *
    * debug(string, object)
-   *                  will log a debug message, including the current code block and stack. It will also
-   *                  log the contents of an object if passed.
+   *              will log a debug message, including the current code block and stack. It will also
+   *              log the contents of an object if passed.
    *
-   *                  @param {string} comment|name       A string that acts as the comment, or the name of an object if an object is passed.
-   *                  @param {object} object             An object to be stringified and logged.
-   *                  @return {void}
+   *              @param {string} comment|name       A string that acts as the comment, or the name of an object if an object is passed.
+   *              @param {object} object             An object to be stringified and logged.
+   *              @return {void}
    *
    * warn(string, object)
-   *                  will log a warn message, including the current code block and stack. It will also
-   *                  log the contents of an object if passed.
+   *              will log a warn message, including the current code block and stack. It will also
+   *              log the contents of an object if passed.
    *
-   *                  @param {string} comment|name       A string that acts as the comment, or the name of an object if an object is passed.
-   *                  @param {object} object             An object to be stringified and logged.
-   *                  @return {void}
+   *              @param {string} comment|name       A string that acts as the comment, or the name of an object if an object is passed.
+   *              @param {object} object             An object to be stringified and logged.
+   *              @return {void}
    *
    * error(string, object)
-   *                  will log an error message, including the current code block and stack. It will also
-   *                  log the contents of an object if passed.
+   *              will log an error message, including the current code block and stack. It will also
+   *              log the contents of an object if passed.
    *
-   *                  @param {string} comment|name       A string that acts as the comment, or the name of an object if an object is passed.
-   *                  @param {object} object             An object to be stringified and logged.
-   *                  @return {void}
+   *              @param {string} comment|name       A string that acts as the comment, or the name of an object if an object is passed.
+   *              @param {object} object             An object to be stringified and logged.
+   *              @return {void}
+   *
+   * reset()
+   *              Resets the code block and stack.
+   *
+   *              @return {void}
    */
-  .factory('log', ['$log', 'constants', 'logServiceConfig', function($log, constants, logServiceConfig) {
-    var codeBlock;
-    var stack;
+  .factory('log', ['$log', 'environment', 'enums', 'logServiceConfig', 'features', function($log, env, enums, logServiceConfig, features) {
+    var codeBlock = '';
+    var stack = '';
 
     var setStack = function(cb, st) {
+      if (env.environment !== enums.environments.dev || !features.log.enabled) return {};
+
       if (logServiceConfig.styles.hasOwnProperty(cb)) {
         codeBlock = cb;
       }
@@ -120,7 +143,7 @@ angular.module('rainboots')
     };
 
     var writeLog = function (logSeverity, info, obj) {
-      if (constants.environment !== constants.enums.environments.dev) return {};
+      if (env.environment !== enums.environments.dev || !features.log.enabled) return {};
 
       var logMessage = [];
 
@@ -138,7 +161,7 @@ angular.module('rainboots')
         return;
       }
 
-      var stylesEnabled = console.debug.length === 1;
+      var stylesEnabled = console.debug.length === 1 && features.log.styles;
       var infoStyle;
 
       var stackStyle = logSeverity === logServiceConfig.severities.warn
@@ -177,12 +200,19 @@ angular.module('rainboots')
           ? logServiceConfig.separators.style
           : '');
 
-        logMessage.push(logServiceConfig.separators.comment, info);
+        logMessage.push(info === logServiceConfig.setStackCalled
+          ? logServiceConfig.separators.data
+          : logServiceConfig.separators.comment
+        );
+
+        logMessage.push(info);
         infoStyle = logSeverity === logServiceConfig.severities.warn
           ? logServiceConfig.styles.warn
           : logSeverity === logServiceConfig.severities.error
             ? logServiceConfig.styles.error
-            : logServiceConfig.styles.comment;
+            : info === logServiceConfig.setStackCalled
+              ? logServiceConfig.styles.data
+              : logServiceConfig.styles.comment;
       }
 
       if (stylesEnabled) {
@@ -191,6 +221,11 @@ angular.module('rainboots')
       else {
         $log[logSeverity](logMessage.join(''));
       }
+    };
+
+    var reset = function() {
+      codeBlock = '';
+      stack = '';
     };
 
     return {
@@ -203,6 +238,9 @@ angular.module('rainboots')
       },
       error: function(info, obj) {
         writeLog(logServiceConfig.severities.error, info, obj);
+      },
+      reset: function() {
+        reset();
       }
     };
   }]);

@@ -4,12 +4,13 @@
 
 'use strict';
 
-describe('Service: balanceService', function () {
+describe('Service: api', function () {
 
   beforeEach(module('rainboots', 'templates'));
 
   // instantiate service
   var api;
+  var env;
   var $httpBackend;
   var migrations;
   var response = {
@@ -54,8 +55,9 @@ describe('Service: balanceService', function () {
     xhrStatus: 'complete'
   };
 
-  beforeEach(inject(function (_$httpBackend_, _api_) {
+  beforeEach(inject(function (_$httpBackend_, _api_, _environment_) {
     api = _api_;
+    env = _environment_;
     $httpBackend = _$httpBackend_;
   }));
 
@@ -64,8 +66,8 @@ describe('Service: balanceService', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('should GET the balance from the server', function () {
-    $httpBackend.expectGET('/migrations').respond(response);
+  it('should GET the migrations from the server', function () {
+    $httpBackend.expectGET(env.apiUrl + '/migrations').respond(response);
 
     migrations = api.getMigrations();
 

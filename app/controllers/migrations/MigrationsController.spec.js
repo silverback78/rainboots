@@ -9,47 +9,28 @@ describe('Controller: MigrationsController', function () {
   var MigrationsController;
   var api;
   var $scope;
-  var response = {
-    data: [
-      {
-        timestamp: '4/1/2018 @ 2:31 pm',
-        version: '1.0.001',
-        description: 'Initialize database tables'
-      },
-      {
-        timestamp: '4/1/2018 @ 2:37 pm',
-        version: '1.0.002',
-        description: 'Add data to words'
-      },
-      {
-        timestamp: '',
-        version: '1.0.003',
-        description: 'Add data to nouns'
-      },
-      {
-        timestamp: '',
-        version: '1.0.004',
-        description: 'Add data to adjectives'
-      }
-    ],
-    status: 200,
-    config: {
-      method: 'GET',
-      transformRequest: [
-        null
-      ],
-      transformResponse: [
-        null
-      ],
-      jsonpCallbackParam: 'callback',
-      url: 'http://localhost/tuchka/parka/migrations',
-      headers: {
-        Accept: 'application/json, text/plain, */*'
-      }
+  var data = [
+    {
+      timestamp: '4/1/2018 @ 2:31 pm',
+      version: '1.0.001',
+      description: 'Initialize database tables'
     },
-    statusText: 'OK',
-    xhrStatus: 'complete'
-  };
+    {
+      timestamp: '4/1/2018 @ 2:37 pm',
+      version: '1.0.002',
+      description: 'Add data to words'
+    },
+    {
+      timestamp: '',
+      version: '1.0.003',
+      description: 'Add data to nouns'
+    },
+    {
+      timestamp: '',
+      version: '1.0.004',
+      description: 'Add data to adjectives'
+    }
+  ];
 
   beforeEach(inject(function (_$controller_, _$q_, _$rootScope_, _api_) {
     $scope = _$rootScope_.$new();
@@ -57,13 +38,18 @@ describe('Controller: MigrationsController', function () {
 
     spyOn(api, 'getMigrations').and.callFake(function() {
       var deferred = _$q_.defer();
-      deferred.resolve(response);
+      deferred.resolve(data);
       return deferred.promise;
     });
 
     MigrationsController = _$controller_('MigrationsController', {
       balanceService: _api_,
-      $scope: $scope
+      $scope: $scope,
+      features: {
+        migrations: {
+          enabled: true
+        }
+      }
     });
   }));
 
@@ -71,8 +57,8 @@ describe('Controller: MigrationsController', function () {
     expect(MigrationsController.title).toBeDefined();
   });
 
-  it('should request migrations', function() {
+  it('should request migrations on load', function() {
     $scope.$root.$digest();
-    expect(MigrationsController.migrations.data[0].timestamp).toBe('4/1/2018 @ 2:31 pm');
+    expect(MigrationsController.migrations[0].timestamp).toBe('4/1/2018 @ 2:31 pm');
   });
 });

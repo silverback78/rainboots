@@ -2,15 +2,19 @@
 
 angular.module('rainboots')
 
-  .controller('MigrationsController', ['api', 'log', 'constants', function(api, log, constants) {
-    log.setStack(constants.enums.codeBlocks.controller, 'MigrationsController');
+  .controller('MigrationsController', ['api', 'log', 'enums', 'features', function(api, log, enums, features) {
+    if (!features.migrations.enabled) return {};
+
+    log.setStack(enums.codeBlocks.controller, 'MigrationsController');
 
     var vm = this;
+    vm.features = features;
+    log.debug('vm.features.migrations.enabled', vm.features.migrations.enabled);
     vm.title = 'Migrations';
 
     api.getMigrations()
       .then(function(data) {
-        log.setStack(constants.enums.codeBlocks.controller, ['MigrationsController', 'getMigrations()']);
+        log.setStack(enums.codeBlocks.controller, ['MigrationsController', 'api.getMigrations().then()']);
         log.debug('data', data);
         vm.migrations = data;
       });

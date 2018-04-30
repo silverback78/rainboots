@@ -14,9 +14,9 @@ module.exports = function(config) {
       './node_modules/angular-messages/angular-messages.js',
       './node_modules/angular-material/angular-material.js',
 
-      './app/environment.spec.js',
+      './app/rainboots.config.js',
       './app/rainboots/rainboots.js',
-      './app/rainboots/constants.js',
+      './app/constants/**/*.js',
       './app/rainboots/routes.js',
 
       './app/controllers/**/*.js',

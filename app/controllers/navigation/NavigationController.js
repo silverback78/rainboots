@@ -5,46 +5,51 @@
 
 angular.module('rainboots')
 
-  .controller('NavigationController', ['$scope', '$location', '$mdSidenav', 'log', 'constants', function ($scope, $location, $mdSidenav, log, constants) {
-    log.setStack(constants.enums.codeBlocks.controller, 'NavigationController');
+  .controller('NavigationController', ['$scope', '$location', '$mdSidenav', 'log', 'enums', 'features', function ($scope, $location, $mdSidenav, log, enums, features) {
+    log.setStack(enums.codeBlocks.controller, 'NavigationController');
 
     var vm = this;
 
-    vm.navItems = [
+    vm.navItems = [];
+
+    vm.navItems.push(
       {
         name: '/home',
         href: '#home',
         label: 'Home'
-      },
-      {
+      }
+    );
+
+    if (features.migrations.enabled) {
+      vm.navItems.push({
         name: '/migrations',
         href: '#migrations',
         label: 'Migrations'
-      }
-    ];
+      });
+    }
 
     $scope.$root.$on('$routeChangeSuccess', function (e, current) {
       $scope.currentNavItem = current.$$route.originalPath;
     });
 
     vm.loadRoute = function(route) {
-      log.setStack(constants.enums.codeBlocks.controller, ['NavigationController', 'loadRoute(' + route + ')']);
+      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'loadRoute(' + route + ')']);
       $location.path(route);
       vm.closeSidenav();
     };
 
     vm.openSidenav = function() {
-      log.setStack(constants.enums.codeBlocks.controller, ['NavigationController', 'openSidenav()']);
+      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'openSidenav()']);
       $mdSidenav('right').open();
     };
 
     vm.closeSidenav = function() {
-      log.setStack(constants.enums.codeBlocks.controller, ['NavigationController', 'closeSidenav()']);
+      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'closeSidenav()']);
       $mdSidenav('right').close();
     };
 
     vm.isSidenavOpen = function(){
-      log.setStack(constants.enums.codeBlocks.controller, ['NavigationController', 'isSidenavOpen()']);
+      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'isSidenavOpen()']);
       return $mdSidenav('right').isOpen();
     };
   }]);
