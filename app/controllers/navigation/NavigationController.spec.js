@@ -1,20 +1,23 @@
 // Specs are allowed to have magic numbers
 /* eslint no-magic-numbers: 0 */
+/* eslint no-undef: 0 */
 
 'use strict';
 
 describe('Directive: NavigationController', function() {
-  beforeEach(module('rainboots'));
+  beforeEach(module('rainboots', 'enums-mock', 'features-mock', 'log-mock'));
 
   describe('NavigationController', function() {
     var $controller;
     var $rootScope;
     var $scope = {};
-    var mdSidenavSpy;
+    var NavigationController;
+    var $mdSidenavSpy;
     var openSpy;
     var closeSpy;
     var isOpenSpy;
-    var NavigationController;
+    var $locationSpy;
+    var pathSpy;
 
     beforeEach(inject(function(_$controller_, _$rootScope_){
       $controller = _$controller_;
@@ -24,19 +27,31 @@ describe('Directive: NavigationController', function() {
       closeSpy = jasmine.createSpy('close');
       isOpenSpy = jasmine.createSpy('isOpen');
 
-      mdSidenavSpy = jasmine.createSpy('$mdSidenav').and.callFake(
+      $mdSidenavSpy = jasmine.createSpy('$mdSidenav').and.callFake(
         function() {
           return {
             open: openSpy,
             close: closeSpy,
             isOpen: isOpenSpy
           };
-        });
+        }
+      );
+
+      pathSpy = jasmine.createSpy('path');
+
+      $locationSpy = jasmine.createSpy('$locationSpy').and.callFake(
+        function() {
+          return {
+            path: pathSpy
+          };
+        }
+      );
 
       $scope.$root = $rootScope;
       NavigationController = $controller('NavigationController', {
-        $scope: $scope,
-        $mdSidenav: mdSidenavSpy
+        $locationSpy: $locationSpy,
+        $mdSidenav: $mdSidenavSpy,
+        $scope: $scope
       });
     }));
 
@@ -65,19 +80,19 @@ describe('Directive: NavigationController', function() {
 
     it('should be able to open the Sidenav', function() {
       NavigationController.openSidenav();
-      expect(mdSidenavSpy).toHaveBeenCalledWith('right');
+      expect($mdSidenavSpy).toHaveBeenCalledWith('right');
       expect(openSpy).toHaveBeenCalled();
     });
 
     it('should be able to close the Sidenav', function() {
       NavigationController.closeSidenav();
-      expect(mdSidenavSpy).toHaveBeenCalledWith('right');
+      expect($mdSidenavSpy).toHaveBeenCalledWith('right');
       expect(closeSpy).toHaveBeenCalled();
     });
 
     it('should know the open state of the Sidenav', function() {
       NavigationController.isSidenavOpen();
-      expect(mdSidenavSpy).toHaveBeenCalledWith('right');
+      expect($mdSidenavSpy).toHaveBeenCalledWith('right');
       expect(isOpenSpy).toHaveBeenCalled();
     });
   });

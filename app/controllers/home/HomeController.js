@@ -2,7 +2,7 @@
 
 angular.module('rainboots')
 
-  .controller('HomeController', ['log', 'enums', function(log, enums) {
+  .controller('HomeController', ['enums', 'log', function(enums, log) {
     log.setStack(enums.codeBlocks.controller, 'HomeController');
 
     var vm = this;

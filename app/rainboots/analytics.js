@@ -9,7 +9,7 @@
 
 angular.module('rainboots')
 
-.run(['environment', 'enums', 'log', function(env, enums, log) {
+.run(['enums', 'environment', 'log', function(enums, env, log) {
     if (env.environment === enums.environments.prod) {
       log.setStack(enums.codeBlocks.run, ['analytics', 'calling google analytics']);
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

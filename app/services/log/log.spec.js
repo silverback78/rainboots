@@ -3,6 +3,7 @@
 /* eslint angular/file-name: 0 */
 /* eslint angular/controller-as: 0 */
 /* eslint angular/function-type: 0 */
+/* eslint no-undef: 0 */
 
 'use strict';
 
@@ -12,7 +13,6 @@ describe('Service: log', function() {
   var enums;
   var env;
   var features;
-  var utilities;
   var $log;
   var log;
   var stack1 = 'stackLevel1';
@@ -27,7 +27,7 @@ describe('Service: log', function() {
   };
 
   beforeEach(function() {
-    module('rainboots');
+    module('rainboots', 'features-mock', 'environment-mock', 'enums-mock');
 
     $log = jasmine.createSpyObj('$log', {
       debug: jasmine.createSpy('debug'),
@@ -35,16 +35,8 @@ describe('Service: log', function() {
       error: jasmine.createSpy('error')
     });
 
-    features = {
-      log: {
-        enabled: true,
-        styles: true
-      }
-    };
-
     module(function($provide) {
       $provide.constant('$log', $log);
-      $provide.constant('features', features);
     });
 
     inject(function($injector) {
@@ -52,7 +44,6 @@ describe('Service: log', function() {
       enums = $injector.get('enums');
       env = $injector.get('environment');
       features = $injector.get('features');
-      utilities = $injector.get('utilities');
     });
 
     $log.debug.calls.reset();
@@ -62,7 +53,9 @@ describe('Service: log', function() {
   });
 
   beforeEach(function() {
-    originalEnvironment = utilities.clone(env);
+    originalEnvironment = {
+      environment: env.environment
+    };
     env.environment = enums.environments.dev;
 
     $log.debug.calls.reset();
@@ -77,7 +70,9 @@ describe('Service: log', function() {
 
   describe('Service: log - behavior in production environment', function() {
     beforeEach(function() {
-      originalEnvironment = utilities.clone(env);
+      originalEnvironment = {
+        environment: env.environment
+      };
       env.environment = enums.environments.prod;
 
       $log.debug.calls.reset();
@@ -99,7 +94,12 @@ describe('Service: log', function() {
 
   describe('Features should work according to the features config', function() {
     beforeEach(function() {
-      originalFeatures = utilities.clone(features);
+      originalFeatures = {
+        log: {
+          enabled: features.log.enabled,
+          styles: features.log.styles
+        }
+      };
       features.log.enabled = false;
       features.log.styles = false;
 
@@ -124,7 +124,7 @@ describe('Service: log', function() {
   describe('Service: log - behavior in dev environment', function() {
     describe('Service: log.setCodeBlock(string)', function() {
       it('should be able to set every code block from enums.codeblocks', function() {
-        Object.keys(enums.codeBlocks).forEach(function(codeBlock) {
+        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
           log.setStack(enums.codeBlocks[codeBlock]);
           expect($log.error).not.toHaveBeenCalled();
         }, enums.codeBlocks);
@@ -157,7 +157,7 @@ describe('Service: log', function() {
       });
 
       it('should be able to log a debug without a stack, but with a warning', function() {
-        Object.keys(enums.codeBlocks).forEach(function(codeBlock) {
+        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
           log.setStack(enums.codeBlocks[codeBlock]);
           log.debug(comment);
           expect($log.debug).toHaveBeenCalledWith(codeBlock + ':  // Lorem ipsum dolor sit amet');
@@ -165,7 +165,7 @@ describe('Service: log', function() {
       });
 
       it('should be able to log a debug without an object passed', function() {
-        Object.keys(enums.codeBlocks).forEach(function(codeBlock) {
+        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
           log.setStack(enums.codeBlocks[codeBlock], stack1);
           log.debug(comment);
           expect($log.debug).toHaveBeenCalledWith(codeBlock + ': stackLevel1 // Lorem ipsum dolor sit amet');
@@ -173,7 +173,7 @@ describe('Service: log', function() {
       });
 
       it('should be able to log a debug with an object passed', function() {
-        Object.keys(enums.codeBlocks).forEach(function(codeBlock) {
+        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
           log.setStack(enums.codeBlocks[codeBlock], stack1);
           log.debug('testObj', testObj);
           expect($log.debug).toHaveBeenCalledWith(codeBlock + ': stackLevel1 -> testObj = {"value1":"Value 1","int1":1,"value2":"Value 2","int2":2}');

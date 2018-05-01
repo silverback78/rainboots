@@ -58,7 +58,21 @@ module.exports = {
             "error",
             "always"
         ],
-        "no-trailing-spaces": 2
+        "no-trailing-spaces": 2,
+        "angular/deferred": 1,
+        "angular/di-order": 1,
+        "angular/angularelement": 1,
+        "angular/foreach": 1,
+        "angular/json-functions": 1,
+        "angular/no-angular-mock": 1,
+        "angular/no-jquery-angularelement": 1,
+        "angular/timeout-service": 1,
+        "angular/typecheck-array": 1,
+        "angular/typecheck-date": 1,
+        "angular/typecheck-function": 1,
+        "angular/typecheck-number": 1,
+        "angular/typecheck-object": 1,
+        "angular/typecheck-string": 1
     },
     "globals": {
         "angular": false,

@@ -9,55 +9,6 @@
 angular.module('rainboots')
 
   /**
-   * Summary.     logServiceConfig is the configuration object for the log factory.
-   *
-   * Description. This object contains all text strings, styles, named items and so on used in log factory.
-   **/
-  .constant('logServiceConfig', {
-    setStackCalled: 'called',
-    severities: {
-      debug: 'debug',
-      warn: 'warn',
-      error: 'error'
-    },
-
-    errors: {
-      codeBlockError: function(cb) {
-        return 'Error setting code block: ' + cb + ' is not a valid code block.';
-      },
-      nocodeBlock: 'Warning: No code block is set',
-      warn: 'Warning: ',
-      error: 'Error: '
-    },
-
-    separators: {
-      comment: ' // ',
-      data: ' -> ',
-      log: ': ',
-      equals: ' = ',
-      style: '%c'
-    },
-
-    styles: {
-      warn: 'color: #493a05',
-      error: 'color: #f00; font-weight: bold;',
-      comment: 'color: #090;',
-      data: 'color: #222',
-      controller: 'color: #015eb5;',
-      directive: 'color: #31a7d6;',
-      filter: 'color: #18979b;',
-      service: 'color: #ae06ba;',
-      factory: 'color: #ae06ba;',
-      constant: 'font-weight: bold; color: #493a05;',
-      value: 'color: #493a05;',
-      decorator: 'color: #f76f9e;',
-      provider: 'color: #c61930;',
-      run: 'color: #222',
-      javascript: 'color: #222;'
-    }
-  })
-
-  /**
    * Summary. Factory for logging information.
    *
    * Description. The log factory should log to the console in the development environment, and to the database
@@ -121,7 +72,51 @@ angular.module('rainboots')
    *
    *              @return {void}
    */
-  .factory('log', ['$log', 'environment', 'enums', 'logServiceConfig', 'features', function($log, env, enums, logServiceConfig, features) {
+  .factory('log', ['$log', 'enums', 'environment', 'features', function($log, enums, env, features) {
+    var logServiceConfig = {
+      setStackCalled: 'called',
+      severities: {
+        debug: 'debug',
+        warn: 'warn',
+        error: 'error'
+      },
+
+      errors: {
+        codeBlockError: function(cb) {
+          return 'Error setting code block: ' + cb + ' is not a valid code block.';
+        },
+        nocodeBlock: 'Warning: No code block is set',
+        warn: 'Warning: ',
+        error: 'Error: '
+      },
+
+      separators: {
+        comment: ' // ',
+        data: ' -> ',
+        log: ': ',
+        equals: ' = ',
+        style: '%c'
+      },
+
+      styles: {
+        warn: 'color: #493a05',
+        error: 'color: #f00; font-weight: bold;',
+        comment: 'color: #090;',
+        data: 'color: #222',
+        controller: 'color: #015eb5;',
+        directive: 'color: #31a7d6;',
+        filter: 'color: #18979b;',
+        service: 'color: #ae06ba;',
+        factory: 'color: #ae06ba;',
+        constant: 'font-weight: bold; color: #493a05;',
+        value: 'color: #493a05;',
+        decorator: 'color: #f76f9e;',
+        provider: 'color: #c61930;',
+        run: 'color: #222',
+        javascript: 'color: #222;'
+      }
+    };
+
     var codeBlock = '';
     var stack = '';
 
@@ -135,7 +130,7 @@ angular.module('rainboots')
         $log.error(logServiceConfig.errors.codeBlockError(cb));
       }
 
-      stack = Array.isArray(st)
+      stack = angular.isArray(st)
         ? st
         : [st];
 
@@ -150,12 +145,12 @@ angular.module('rainboots')
       if (!codeBlock) {
         logMessage.push(logServiceConfig.errors.nocodeBlock);
         logMessage.push(logServiceConfig.separators.log);
-        logMessage.push(Array.isArray(stack)
+        logMessage.push(angular.isArray(stack)
           ? stack.join(logServiceConfig.separators.data)
           : '');
         logMessage.push(logServiceConfig.separators.comment, info);
         if (obj) {
-          logMessage.push(logServiceConfig.separators.log, JSON.stringify(obj));
+          logMessage.push(logServiceConfig.separators.log, angular.toJson(obj));
         }
         $log.warn(logMessage.join(''));
         return;
@@ -188,7 +183,7 @@ angular.module('rainboots')
           ? logServiceConfig.separators.style
           : '');
 
-        logMessage.push(JSON.stringify(obj));
+        logMessage.push(angular.toJson(obj));
         infoStyle = logSeverity === logServiceConfig.severities.warn
           ? logServiceConfig.styles.warn
           : logSeverity === logServiceConfig.severities.error

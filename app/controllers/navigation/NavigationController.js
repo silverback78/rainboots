@@ -5,7 +5,7 @@
 
 angular.module('rainboots')
 
-  .controller('NavigationController', ['$scope', '$location', '$mdSidenav', 'log', 'enums', 'features', function ($scope, $location, $mdSidenav, log, enums, features) {
+  .controller('NavigationController', ['$location', '$mdSidenav', '$scope', 'enums', 'features', 'log', function ($location, $mdSidenav, $scope, enums, features, log) {
     log.setStack(enums.codeBlocks.controller, 'NavigationController');
 
     var vm = this;

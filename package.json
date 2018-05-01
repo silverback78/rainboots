@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "lint": "gulp lint",
+    "eslint": "gulp lint",
     "build-prod": "gulp build-prod",
     "test": "karma start karma.conf.js --browsers PhantomJS_debug",
     "test-chrome": "karma start karma.conf.js --browsers Chrome"

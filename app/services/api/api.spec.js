@@ -1,16 +1,19 @@
 // Specs are allowed leniency with linting
 /* eslint no-magic-numbers: 0 */
 /* eslint quotes: 0 */
+/* eslint no-undef: 0 */
+/* eslint no-unused-vars: 0 */
 
 'use strict';
 
 describe('Service: api', function () {
 
-  beforeEach(module('rainboots', 'templates'));
+  beforeEach(module('rainboots', 'templates', 'enums-mock', 'log-mock', 'environment-mock'));
 
   // instantiate service
   var api;
   var env;
+  var log;
   var $httpBackend;
   var migrations;
   var response = {

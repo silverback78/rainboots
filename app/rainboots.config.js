@@ -1,4 +1,4 @@
-// This file the environment file and is not part of angular. Should not use angular linting rules.
+// This file is the environment file and is not part of angular. Should not use angular linting rules.
 /* eslint angular/window-service: 0 */
 
 'use strict';

@@ -2,7 +2,7 @@
 
 angular.module('rainboots')
 
-  .controller('MigrationsController', ['api', 'log', 'enums', 'features', function(api, log, enums, features) {
+  .controller('MigrationsController', ['api', 'enums', 'features', 'log', function(api, enums, features, log) {
     if (!features.migrations.enabled) return {};
 
     log.setStack(enums.codeBlocks.controller, 'MigrationsController');
