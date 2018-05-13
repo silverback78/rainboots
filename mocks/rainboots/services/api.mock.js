@@ -27,10 +27,10 @@ var migrationsData = [
 ];
 
 angular.module('api-mock', [])
-  .factory('api', ['$q', function($q) {
+  .factory('api', ['$q', function ($q) {
     return {
-      getMigrations: function() {
-        return $q(function(resolve) {
+      getMigrations: function () {
+        return $q(function (resolve) {
           resolve(migrationsData);
         });
       }

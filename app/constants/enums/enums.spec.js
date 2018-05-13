@@ -7,7 +7,7 @@ describe('Constant: enums', function() {
   var enums;
   var enumsMockValue;
 
-  beforeEach(module('rainboots', 'enums-mock-value'));
+  beforeEach(module('rainboots', 'enums-mock-value', 'config-mock', 'log-mock'));
 
   beforeEach(inject(function(_enums_, _enumsMockValue_){
     enums = _enums_;

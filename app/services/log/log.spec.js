@@ -8,11 +8,10 @@
 'use strict';
 
 describe('Service: log', function() {
-  var originalEnvironment;
+  var originalEnv;
   var originalFeatures;
+  var config;
   var enums;
-  var env;
-  var features;
   var $log;
   var log;
   var stack1 = 'stackLevel1';
@@ -27,7 +26,7 @@ describe('Service: log', function() {
   };
 
   beforeEach(function() {
-    module('rainboots', 'features-mock', 'environment-mock', 'enums-mock');
+    module('rainboots', 'config-mock', 'enums-mock');
 
     $log = jasmine.createSpyObj('$log', {
       debug: jasmine.createSpy('debug'),
@@ -42,8 +41,7 @@ describe('Service: log', function() {
     inject(function($injector) {
       log = $injector.get('log');
       enums = $injector.get('enums');
-      env = $injector.get('environment');
-      features = $injector.get('features');
+      config = $injector.get('config');
     });
 
     $log.debug.calls.reset();
@@ -53,10 +51,9 @@ describe('Service: log', function() {
   });
 
   beforeEach(function() {
-    originalEnvironment = {
-      environment: env.environment
-    };
-    env.environment = enums.environments.dev;
+    config.features.log.stylesEnabled = false;
+    originalEnv = config.env.env;
+    config.env.env = enums.env.dev;
 
     $log.debug.calls.reset();
     $log.warn.calls.reset();
@@ -65,15 +62,13 @@ describe('Service: log', function() {
   });
 
   afterEach(function() {
-    env.environment = originalEnvironment.environment;
+    config.env.env = originalEnv;
   });
 
   describe('Service: log - behavior in production environment', function() {
     beforeEach(function() {
-      originalEnvironment = {
-        environment: env.environment
-      };
-      env.environment = enums.environments.prod;
+      originalEnv = config.env.env;
+      config.env.env = enums.env.prod;
 
       $log.debug.calls.reset();
       $log.warn.calls.reset();
@@ -82,7 +77,7 @@ describe('Service: log', function() {
     });
 
     afterEach(function() {
-      env.environment = originalEnvironment.environment;
+      config.env.env = originalEnv;
     });
 
     it('should not log anything to console if environment is production', function() {
@@ -96,12 +91,12 @@ describe('Service: log', function() {
     beforeEach(function() {
       originalFeatures = {
         log: {
-          enabled: features.log.enabled,
-          styles: features.log.styles
+          enabled: config.features.log.enabled,
+          styles: config.features.log.styles
         }
       };
-      features.log.enabled = false;
-      features.log.styles = false;
+      config.features.log.enabled = false;
+      config.features.log.styles = false;
 
       $log.debug.calls.reset();
       $log.warn.calls.reset();
@@ -110,8 +105,8 @@ describe('Service: log', function() {
     });
 
     afterEach(function() {
-      features.log.enabled = originalFeatures.log.enabled;
-      features.log.styles = originalFeatures.log.styles;
+      config.features.log.enabled = originalFeatures.log.enabled;
+      config.features.log.styles = originalFeatures.log.styles;
     });
 
     it('should not log anything if the feature is disabled', function() {

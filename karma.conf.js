@@ -14,26 +14,26 @@ module.exports = function(config) {
       './node_modules/angular-messages/angular-messages.js',
       './node_modules/angular-material/angular-material.js',
 
-      './app/mocks/rainboots/**/*.js',
-      './app/rainboots.config.js',
+      { pattern: './app/rainboots.config.json', included: false, served: true },
+      './mocks/rainboots/**/*.js',
+
+      './app/models/**/*.js',
       './app/rainboots/rainboots.js',
-      './app/constants/**/*.js',
       './app/rainboots/routes.js',
 
+      './app/providers/**/*.js',
+      './app/constants/**/*.js',
+      './app/services/**/*.js',
       './app/controllers/**/*.js',
       './app/directives/**/*.js',
-      './app/services/**/*.js',
 
       './app/controllers/**/*.html',
-      './app/directives/**/*.html',
-      './app/icons/**/*.svg',
-
-      './app/**/*.spec.js'
+      './app/icons/**/*.svg'
     ],
 
     frameworks: ['jasmine'],
     browsers: ['Chrome', 'PhantomJS'],
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
     port: 9876,
 
     customLaunchers: {
@@ -46,7 +46,8 @@ module.exports = function(config) {
     preprocessors: {
       './app/directives/**/*.html': 'ng-html2js',
       './app/controllers/**/*.html': 'ng-html2js',
-      './app/icons/**/*.svg': 'ng-html2js'
+      './app/icons/**/*.svg': 'ng-html2js',
+      './app/**/*.js': ['coverage']
     },
 
     ngHtml2JsPreprocessor: {
@@ -58,7 +59,8 @@ module.exports = function(config) {
       'karma-chrome-launcher',
       'karma-phantomjs-launcher',
       'karma-jasmine',
-      'karma-ng-html2js-preprocessor'
+      'karma-ng-html2js-preprocessor',
+      'karma-coverage'
     ],
 
     colors: true,

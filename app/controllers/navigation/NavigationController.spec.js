@@ -5,7 +5,7 @@
 'use strict';
 
 describe('Directive: NavigationController', function() {
-  beforeEach(module('rainboots', 'enums-mock', 'features-mock', 'log-mock'));
+  beforeEach(module('rainboots', 'enums-mock', 'config-mock', 'log-mock'));
 
   describe('NavigationController', function() {
     var $controller;

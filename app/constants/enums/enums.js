@@ -3,7 +3,7 @@
 angular.module('rainboots')
 
   .constant('enums', {
-    environments: {
+    env: {
       dev: 'dev',
       prod: 'prod',
       spec: 'spec'

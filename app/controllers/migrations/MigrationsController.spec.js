@@ -5,7 +5,7 @@
 'use strict';
 
 describe('Controller: MigrationsController', function () {
-  beforeEach(module('rainboots', 'templates', 'api-mock', 'enums-mock', 'features-mock', 'log-mock'));
+  beforeEach(module('rainboots', 'templates', 'api-mock', 'enums-mock', 'config-mock', 'log-mock'));
 
   var MigrationsController;
   var $scope;

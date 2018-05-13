@@ -9,8 +9,8 @@ angular.module('NavigationController-mock', [])
   .controller('NavigationController', function () {
     var vm = this;
     vm.navItems = [];
-    vm.loadRoute = function() {};
-    vm.openSidenav = function() {};
-    vm.closeSidenav = function() {};
-    vm.isSidenavOpen = function(){};
+    vm.loadRoute = function () {};
+    vm.openSidenav = function () {};
+    vm.closeSidenav = function () {};
+    vm.isSidenavOpen = function (){};
   });

@@ -2,27 +2,26 @@
 
 angular.module('rainboots')
 
-  .factory('api', ['$http', '$q', 'enums', 'environment', 'log', function($http, $q, enums, env, log) {
+  .factory('api', ['$http', '$q', 'config', 'enums', 'log', function($http, $q, config, enums, log) {
     log.setStack(enums.codeBlocks.factory, 'api');
     return {
       getMigrations: function () {
         log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()']);
 
         return $q(function(resolve, reject) {
-          $http.get(env.apiUrl + '/migrations')
+          $http.post(config.env.api.migrations)
             .then(
               function(response) {
-                log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.get(' + env.apiUrl + '/migrations)']);
+                log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.post(' + config.env.api.migrations + ')']);
                 log.debug('response', response);
                 resolve(response.data);
               },
               function() {
-                log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.get(' + env.apiUrl + '/migrations)', '$http error callback']);
+                log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.post(' + config.env.api.migrations + ')', '$http error callback']);
                 log.error('Failed to get migrations');
                 reject('Failed to get migrations');
               }
             );
-
         });
       }
     };

@@ -8,11 +8,11 @@
 
 describe('Service: api', function () {
 
-  beforeEach(module('rainboots', 'templates', 'enums-mock', 'log-mock', 'environment-mock'));
+  beforeEach(module('rainboots', 'templates', 'config-mock', 'enums-mock', 'log-mock'));
 
   // instantiate service
   var api;
-  var env;
+  var config;
   var log;
   var $httpBackend;
   var migrations;
@@ -38,29 +38,12 @@ describe('Service: api', function () {
         version: '1.0.004',
         description: 'Add data to adjectives'
       }
-    ],
-    status: 200,
-    config: {
-      method: 'GET',
-      transformRequest: [
-        null
-      ],
-      transformResponse: [
-        null
-      ],
-      jsonpCallbackParam: 'callback',
-      url: 'http://localhost/tuchka/parka/migrations',
-      headers: {
-        Accept: 'application/json, text/plain, */*'
-      }
-    },
-    statusText: 'OK',
-    xhrStatus: 'complete'
+    ]
   };
 
-  beforeEach(inject(function (_$httpBackend_, _api_, _environment_) {
+  beforeEach(inject(function (_$httpBackend_, _api_, _config_) {
     api = _api_;
-    env = _environment_;
+    config = _config_;
     $httpBackend = _$httpBackend_;
   }));
 
@@ -69,8 +52,8 @@ describe('Service: api', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('should GET the migrations from the server', function () {
-    $httpBackend.expectGET(env.apiUrl + '/migrations').respond(response);
+  it('should POST the migrations from the server', function () {
+    $httpBackend.expectPOST(config.env.api.migrations).respond(response);
 
     migrations = api.getMigrations();
 

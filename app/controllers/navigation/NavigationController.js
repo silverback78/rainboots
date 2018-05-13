@@ -1,11 +1,11 @@
-// Using controller-as, but $scope must be used to set angular material properties
+// Using controller-as so this rule is being followed. $scope must be used to set angular material properties and triggering a false lint error
 /* eslint angular/controller-as: 0 */
 
 'use strict';
 
 angular.module('rainboots')
 
-  .controller('NavigationController', ['$location', '$mdSidenav', '$scope', 'enums', 'features', 'log', function ($location, $mdSidenav, $scope, enums, features, log) {
+  .controller('NavigationController', ['$location', '$mdSidenav', '$scope', 'config', 'enums', 'log', function ($location, $mdSidenav, $scope, config, enums, log) {
     log.setStack(enums.codeBlocks.controller, 'NavigationController');
 
     var vm = this;
@@ -20,7 +20,7 @@ angular.module('rainboots')
       }
     );
 
-    if (features.migrations.enabled) {
+    if (config.features.migrations.enabled) {
       vm.navItems.push({
         name: '/migrations',
         href: '#migrations',

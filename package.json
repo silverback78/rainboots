@@ -7,6 +7,7 @@
     "eslint": "gulp lint",
     "build-prod": "gulp build-prod",
     "test": "karma start karma.conf.js --browsers PhantomJS_debug",
+    "test-no-debug": "karma start karma.conf.js --browsers PhantomJS",
     "test-chrome": "karma start karma.conf.js --browsers Chrome"
   },
   "repository": {
@@ -36,6 +37,7 @@
     "karma": "2.0.2",
     "karma-chrome-launcher": "2.2.0",
     "karma-cli": "1.0.1",
+    "karma-coverage": "1.1.2",
     "karma-jasmine": "1.1.1",
     "karma-ng-html2js-preprocessor": "1.0.0",
     "karma-phantomjs-launcher": "1.0.4"

@@ -1,6 +1,3 @@
-// Allowing magic numbers for function overloading
-/* eslint no-magic-numbers: 0 */
-
 // Not using console, simply checking to see if it supports colors. Using $log service to actually log.
 /* eslint no-console: 0 */
 
@@ -72,7 +69,7 @@ angular.module('rainboots')
    *
    *              @return {void}
    */
-  .factory('log', ['$log', 'enums', 'environment', 'features', function($log, enums, env, features) {
+  .factory('log', ['$log', 'config', 'enums', function($log, config, enums) {
     var logServiceConfig = {
       setStackCalled: 'called',
       severities: {
@@ -82,8 +79,8 @@ angular.module('rainboots')
       },
 
       errors: {
-        codeBlockError: function(cb) {
-          return 'Error setting code block: ' + cb + ' is not a valid code block.';
+        codeBlockError: function(codeBlock) {
+          return 'Error setting code block: ' + codeBlock + ' is not a valid code block.';
         },
         nocodeBlock: 'Warning: No code block is set',
         warn: 'Warning: ',
@@ -117,36 +114,36 @@ angular.module('rainboots')
       }
     };
 
-    var codeBlock = '';
-    var stack = '';
+    var CodeBlock = '';
+    var Stack = '';
 
-    var setStack = function(cb, st) {
-      if (env.environment !== enums.environments.dev || !features.log.enabled) return {};
+    var setStack = function(codeBlock, stack) {
+      if (config.env.env !== enums.env.dev || !config.features.log.enabled) return {};
 
-      if (logServiceConfig.styles.hasOwnProperty(cb)) {
-        codeBlock = cb;
+      if (logServiceConfig.styles.hasOwnProperty(codeBlock)) {
+        CodeBlock = codeBlock;
       }
       else {
-        $log.error(logServiceConfig.errors.codeBlockError(cb));
+        $log.error(logServiceConfig.errors.codeBlockError(codeBlock));
       }
 
-      stack = angular.isArray(st)
-        ? st
-        : [st];
+      Stack = angular.isArray(stack)
+        ? stack
+        : [stack];
 
       writeLog(logServiceConfig.severities.debug, logServiceConfig.setStackCalled);
     };
 
     var writeLog = function (logSeverity, info, obj) {
-      if (env.environment !== enums.environments.dev || !features.log.enabled) return {};
+      if (config.env.env !== enums.env.dev || !config.features.log.enabled) return {};
 
       var logMessage = [];
 
-      if (!codeBlock) {
+      if (!CodeBlock) {
         logMessage.push(logServiceConfig.errors.nocodeBlock);
         logMessage.push(logServiceConfig.separators.log);
-        logMessage.push(angular.isArray(stack)
-          ? stack.join(logServiceConfig.separators.data)
+        logMessage.push(angular.isArray(Stack)
+          ? Stack.join(logServiceConfig.separators.data)
           : '');
         logMessage.push(logServiceConfig.separators.comment, info);
         if (obj) {
@@ -156,15 +153,17 @@ angular.module('rainboots')
         return;
       }
 
-      var stylesEnabled = console.debug.length === 1 && features.log.styles;
+      var styleParamPosition = 1;
+      var stylesEnabled = console.debug.length === styleParamPosition && config.features.log.styles;
       var infoStyle;
 
       var stackStyle = logSeverity === logServiceConfig.severities.warn
         ? logServiceConfig.styles.warn
         : logSeverity === logServiceConfig.severities.error
           ? logServiceConfig.styles.error
-          : logServiceConfig.styles[codeBlock];
-      stack = stack || [];
+          : logServiceConfig.styles[CodeBlock];
+
+      Stack = Stack || [];
 
       logMessage.push(stylesEnabled
         ? logServiceConfig.separators.style
@@ -174,7 +173,7 @@ angular.module('rainboots')
         ? logServiceConfig.errors[logSeverity]
         : '');
 
-      logMessage.push(codeBlock, logServiceConfig.separators.log, stack.join(logServiceConfig.separators.data));
+      logMessage.push(CodeBlock, logServiceConfig.separators.log, Stack.join(logServiceConfig.separators.data));
 
       if (obj) {
         logMessage.push(logServiceConfig.separators.data, info, logServiceConfig.separators.equals);
@@ -219,8 +218,8 @@ angular.module('rainboots')
     };
 
     var reset = function() {
-      codeBlock = '';
-      stack = '';
+      CodeBlock = '';
+      Stack = '';
     };
 
     return {

@@ -9,7 +9,7 @@ describe('Directive: navigation', function() {
   var $rootScope;
   var log;
 
-  beforeEach(module('rainboots', 'templates', 'NavigationController-mock'));
+  beforeEach(module('rainboots', 'templates', 'NavigationController-mock', 'config-mock', 'log-mock'));
 
   beforeEach(inject(function(_$compile_, _$rootScope_){
     $compile = _$compile_;

@@ -1,0 +1,18 @@
+{
+  "env": {
+    "env": "dev",
+    "api": {
+      "migrations": "../../parka/migrations",
+      "features": "../../parka/features"
+    }
+  },
+  "features": {
+    "log": {
+      "enabled": true,
+      "styles": true
+    },
+    "migrations": {
+      "enabled": true
+    }
+  }
+}

@@ -5,7 +5,7 @@
 'use strict';
 
 var enums = {
-  environments: {
+  env: {
     dev: 'dev',
     prod: 'prod',
     spec: 'spec'
