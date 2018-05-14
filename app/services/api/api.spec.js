@@ -41,10 +41,11 @@ describe('Service: api', function () {
     ]
   };
 
-  beforeEach(inject(function (_$httpBackend_, _api_, _config_) {
+  beforeEach(inject(function (_$httpBackend_, _api_, _config_, _log_) {
+    $httpBackend = _$httpBackend_;
     api = _api_;
     config = _config_;
-    $httpBackend = _$httpBackend_;
+    log = _log_;
   }));
 
   afterEach(function() {
@@ -62,5 +63,16 @@ describe('Service: api', function () {
     migrations.then(function(response) {
       expect(response.data[0].timestamp).toBe('4/1/2018 @ 2:31 pm');
     });
+  });
+
+  it('should handle errors', function() {
+    spyOn(log, 'error');
+    $httpBackend.expectPOST(config.env.api.migrations).respond(400, {});
+    migrations = api.getMigrations();
+
+    $httpBackend.flush();
+
+    migrations.then();
+    expect(log.error).toHaveBeenCalledWith('Failed to get migrations');
   });
 });

@@ -8,7 +8,7 @@ angular.module('rainboots')
       getMigrations: function () {
         log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()']);
 
-        return $q(function(resolve, reject) {
+        return $q(function(resolve) {
           $http.post(config.env.api.migrations)
             .then(
               function(response) {
@@ -19,7 +19,6 @@ angular.module('rainboots')
               function() {
                 log.setStack(enums.codeBlocks.factory, ['api', 'getMigrations()', '$http.post(' + config.env.api.migrations + ')', '$http error callback']);
                 log.error('Failed to get migrations');
-                reject('Failed to get migrations');
               }
             );
         });

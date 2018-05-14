@@ -9,7 +9,7 @@ angular.module('config-mock', [])
   .provider('config', function () {
     var configurationData = {
       env: {
-        env: 'dev',
+        env: 'test',
         api: {
           migrations: '../../parka/migrations',
           features: '../../parka/features'
@@ -18,7 +18,7 @@ angular.module('config-mock', [])
       features: {
         log: {
           enabled: true,
-          styles: true
+          styles: false
         },
         migrations: {
           enabled: true

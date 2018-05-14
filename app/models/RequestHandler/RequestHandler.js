@@ -5,7 +5,7 @@ var rainboots = rainboots || {};
 rainboots.RequestHandler = function () {
   this.requests = [];
   this.successCount = 0;
-  this.failureCount = 0;
+  this.completeCount = 0;
 };
 
 rainboots.RequestHandler.prototype.addRequest = function(requestType, requestUrl, successCallback, failureCallback) {
@@ -20,8 +20,11 @@ rainboots.RequestHandler.prototype.addRequest = function(requestType, requestUrl
   xhttp.parent = this;
 
   xhttp.onreadystatechange = function () {
-    if (this.readyState === doneReadyState) {
-      if (this.status === successStatus) {
+    var requestComplete = this.readyState === doneReadyState;
+    var successfulResponse = this.status === successStatus;
+
+    if (requestComplete) {
+      if (successfulResponse) {
         angular.isFunction(this.successCallback) && this.successCallback(xhttp.responseText);
         xhttp.parent.completeRequest(true);
       }
@@ -47,14 +50,15 @@ rainboots.RequestHandler.prototype.sendAll = function(finalSuccessCallback, fina
 };
 
 rainboots.RequestHandler.prototype.completeRequest = function(success) {
-  success
-    ? this.successCount++
-    : this.successCount--;
+  success && this.successCount++;
+  this.completeCount++;
 
-  var complete = this.requests.length === this.successCount + this.failureCount;
+  var allComplete = this.requests.length === this.completeCount;
 
-  if (complete) {
-    if (this.successCount === this.requests.length) {
+  if (allComplete) {
+    var allSuccess = this.successCount === this.requests.length;
+
+    if (allSuccess) {
       angular.isFunction(this.finalSuccessCallback) && this.finalSuccessCallback();
     }
     else {

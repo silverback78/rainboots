@@ -4,11 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "eslint": "gulp lint",
+    "lint": "gulp lint",
     "build-prod": "gulp build-prod",
-    "test": "karma start karma.conf.js --browsers PhantomJS_debug",
-    "test-no-debug": "karma start karma.conf.js --browsers PhantomJS",
-    "test-chrome": "karma start karma.conf.js --browsers Chrome"
+    "test-phantomjs-debug": "karma start karma.conf.js --browsers PhantomJS_debug",
+    "test-phantomjs": "karma start karma.conf.js --browsers PhantomJS",
+    "test": "karma start karma.conf.js --browsers Chrome"
   },
   "repository": {
     "type": "git",

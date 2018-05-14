@@ -19,7 +19,6 @@ module.exports = function(config) {
 
       './app/models/**/*.js',
       './app/rainboots/rainboots.js',
-      './app/rainboots/routes.js',
 
       './app/providers/**/*.js',
       './app/constants/**/*.js',
@@ -53,6 +52,12 @@ module.exports = function(config) {
     ngHtml2JsPreprocessor: {
       stripPrefix: 'app/',
       moduleName: 'templates'
+    },
+
+    coverageReporter: {
+      instrumenterOptions: {
+        istanbul: { noCompact: true }
+      }
     },
 
     plugins: [
