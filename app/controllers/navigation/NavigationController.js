@@ -12,13 +12,11 @@ angular.module('rainboots')
 
     vm.navItems = [];
 
-    vm.navItems.push(
-      {
-        name: '/home',
-        href: '#home',
-        label: 'Home'
-      }
-    );
+    vm.navItems.push({
+      name: '/home',
+      href: '#home',
+      label: 'Home'
+    });
 
     if (config.features.migrations.enabled) {
       vm.navItems.push({

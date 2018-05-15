@@ -53,8 +53,8 @@ describe('Service: log', function() {
 
   beforeEach(function() {
     config.features.log.stylesEnabled = false;
-    originalEnv = config.env.env;
-    config.env.env = enums.env.dev;
+    originalEnv = config.env;
+    config.env = enums.env.dev;
 
     $log.debug.calls.reset();
     $log.warn.calls.reset();
@@ -63,13 +63,13 @@ describe('Service: log', function() {
   });
 
   afterEach(function() {
-    config.env.env = originalEnv;
+    config.env = originalEnv;
   });
 
   describe('Service: log - behavior in production environment', function() {
     beforeEach(function() {
-      originalEnv = config.env.env;
-      config.env.env = enums.env.prod;
+      originalEnv = config.env;
+      config.env = enums.env.prod;
 
       $log.debug.calls.reset();
       $log.warn.calls.reset();
@@ -78,7 +78,7 @@ describe('Service: log', function() {
     });
 
     afterEach(function() {
-      config.env.env = originalEnv;
+      config.env = originalEnv;
     });
 
     it('should not log anything to console if environment is production', function() {

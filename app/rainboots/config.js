@@ -2,10 +2,18 @@
 
 var rainboots = rainboots || {};
 
-rainboots.loadConfig = function (data) {
+rainboots.loadLocalConfig = function (data) {
   angular.module('rainboots')
 
-    .config(['$locationProvider', '$routeProvider', 'configProvider', function($locationProvider, $routeProvider, configProvider) {
-      configProvider.setConfig(data);
+    .config(['configProvider', function(configProvider) {
+      configProvider.setLocalConfig(data);
+    }]);
+};
+
+rainboots.loadRemoteConfig = function (data) {
+  angular.module('rainboots')
+
+    .config(['configProvider', function(configProvider) {
+      configProvider.setRemoteConfig(data);
     }]);
 };

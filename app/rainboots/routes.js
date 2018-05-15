@@ -30,7 +30,7 @@ rainboots.loadRoutes = function () {
       $routeProvider.otherwise({redirectTo: '/home'});
     }])
 
-    .run(['$rootScope', 'page', function($rootScope, page) {
+    .run(['page', function(page) {
       page.registerTitleEventHandler();
     }]);
 };

@@ -1,6 +1,7 @@
 // Specs are allowed leniency with linting
 /* eslint no-undef: 0 */
 /* eslint no-magic-numbers: 0 */
+/* eslint quotes: 0 */
 
 'use strict';
 
@@ -60,6 +61,47 @@ describe('Model: RequestHandler', function () {
 
     it('should call the failure callback on a failed request', function() {
       expect(failureCallback).toHaveBeenCalled();
+    });
+  });
+
+  describe('Async functionality', function() {
+
+    beforeEach(function() {
+      jasmine.Ajax.install();
+      rainboots.testVal = 0;
+
+      var addOne = function() {
+        rainboots.testVal += 1;
+      };
+
+      var multiplyByZero = function() {
+        rainboots.testVal *= 0;
+      };
+
+      requestHandler.addRequest('GET', '/config1.json', addOne);
+      requestHandler.addRequest('GET', '/config2.json', multiplyByZero);
+
+      requestHandler.sendAll();
+
+      jasmine.Ajax.requests.mostRecent().respondWith({
+        "status": 200,
+        "contentType": "text/plain",
+        "responseText": "responseText"
+      });
+
+      jasmine.Ajax.requests.first().respondWith({
+        "status": 200,
+        "contentType": "text/plain",
+        "responseText": "responseText"
+      });
+    });
+
+    afterEach(function() {
+      jasmine.Ajax.uninstall();
+    });
+
+    it('The second request should finish first if the first request takes longer', function() {
+      expect(rainboots.testVal).toBe(1);
     });
   });
 

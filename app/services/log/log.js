@@ -12,6 +12,8 @@ angular.module('rainboots')
    *              in production environment. It should utilize colors when available and coherently display the
    *              current stack, comment, and any objects associated with the log.
    *
+   *              Because logging is frequently run, in many areas code readability was sacrificed for speed.
+   *
    *              Examples:
    *
    *              // With a single level stack as a string
@@ -118,9 +120,11 @@ angular.module('rainboots')
     var Stack = '';
 
     var setStack = function(codeBlock, stack) {
-      if (config.env.env !== enums.env.dev || !config.features.log.enabled) return {};
+      var logsDisabled = config.env !== enums.env.dev || !config.features.log.enabled;
+      if (logsDisabled) return {};
 
-      if (logServiceConfig.styles.hasOwnProperty(codeBlock)) {
+      var validCodeBlock = logServiceConfig.styles.hasOwnProperty(codeBlock);
+      if (validCodeBlock) {
         CodeBlock = codeBlock;
       }
       else {
@@ -135,7 +139,8 @@ angular.module('rainboots')
     };
 
     var writeLog = function (logSeverity, info, obj) {
-      if (config.env.env !== enums.env.dev || !config.features.log.enabled) return {};
+      var logsDisabled = config.env !== enums.env.dev || !config.features.log.enabled;
+      if (logsDisabled) return {};
 
       var logMessage = [];
 

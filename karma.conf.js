@@ -30,7 +30,7 @@ module.exports = function(config) {
       './app/icons/**/*.svg'
     ],
 
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine-ajax', 'jasmine'],
     browsers: ['Chrome', 'PhantomJS'],
     reporters: ['progress', 'coverage'],
     port: 9876,
@@ -65,7 +65,8 @@ module.exports = function(config) {
       'karma-phantomjs-launcher',
       'karma-jasmine',
       'karma-ng-html2js-preprocessor',
-      'karma-coverage'
+      'karma-coverage',
+      'karma-jasmine-ajax'
     ],
 
     colors: true,

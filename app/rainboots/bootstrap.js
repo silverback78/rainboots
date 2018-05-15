@@ -3,18 +3,18 @@
 var rainboots = rainboots || {};
 
 angular.element(document).ready(function () {
-  var initialize = function(data) {
-    rainboots.loadConfig(data);
-    rainboots.loadRoutes();
-  };
-
   var bootstrap = function() {
+    rainboots.loadRoutes();
     angular.bootstrap(document, ['rainboots']);
   };
 
-  var requests = new rainboots.RequestHandler();
+  var configFile = './rainboots.config.json';
+  var serverConfigUrl = '../../parka/config';
+  var requestType = 'GET';
 
-  requests.addRequest('GET', './rainboots.config.json', initialize);
+  var requestHandler = new rainboots.RequestHandler();
+  requestHandler.addRequest(requestType, configFile, rainboots.loadLocalConfig);
+  requestHandler.addRequest(requestType, serverConfigUrl, rainboots.loadRemoteConfig);
 
-  requests.sendAll(bootstrap);
+  requestHandler.sendAll(bootstrap);
 });
