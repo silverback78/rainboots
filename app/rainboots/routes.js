@@ -2,6 +2,12 @@
 
 var rainboots = rainboots || {};
 
+/**
+ * Summary.     Initializes routing.
+ *
+ * Description. Handles registering a function to be called during the bootstrap process that will initialize routing
+ *              for the application. Also registers an event handler to change the page title on a successful route change.
+ */
 rainboots.loadRoutes = function () {
   angular.module('rainboots')
 

@@ -8,7 +8,7 @@
 
 describe('Service: api', function () {
 
-  beforeEach(module('rainboots', 'templates', 'config-mock', 'enums-mock', 'log-mock'));
+  beforeEach(module('rainboots', 'templates', 'config-mock', 'log-mock'));
 
   // instantiate service
   var api;

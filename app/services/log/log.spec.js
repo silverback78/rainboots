@@ -12,7 +12,8 @@ describe('Service: log', function() {
   var originalEnv;
   var originalFeatures;
   var config;
-  var enums;
+  var env;
+  var codeBlocks;
   var $log;
   var log;
   var stack1 = 'stackLevel1';
@@ -27,7 +28,7 @@ describe('Service: log', function() {
   };
 
   beforeEach(function() {
-    module('rainboots', 'config-mock', 'enums-mock');
+    module('rainboots', 'config-mock');
 
     $log = jasmine.createSpyObj('$log', {
       debug: jasmine.createSpy('debug'),
@@ -41,7 +42,8 @@ describe('Service: log', function() {
 
     inject(function($injector) {
       log = $injector.get('log');
-      enums = $injector.get('enums');
+      codeBlocks = $injector.get('enums.codeBlocks');
+      env = $injector.get('enums.env');
       config = $injector.get('config');
     });
 
@@ -54,7 +56,7 @@ describe('Service: log', function() {
   beforeEach(function() {
     config.features.log.stylesEnabled = false;
     originalEnv = config.env;
-    config.env = enums.env.dev;
+    config.env = env.dev;
 
     $log.debug.calls.reset();
     $log.warn.calls.reset();
@@ -69,7 +71,7 @@ describe('Service: log', function() {
   describe('Service: log - behavior in production environment', function() {
     beforeEach(function() {
       originalEnv = config.env;
-      config.env = enums.env.prod;
+      config.env = env.prod;
 
       $log.debug.calls.reset();
       $log.warn.calls.reset();
@@ -110,7 +112,7 @@ describe('Service: log', function() {
 
     it('should not log anything if the feature is disabled', function() {
       config.features.log.enabled = false;
-      log.setStack(enums.codeBlocks.javascript, stack1);
+      log.setStack(codeBlocks.javascript, stack1);
       log.debug(comment);
       expect($log.debug).not.toHaveBeenCalled();
     });
@@ -118,7 +120,7 @@ describe('Service: log', function() {
     it('should log with styles if styles are enabled', function() {
       config.features.log.styles = true;
       console.debug = [0];
-      log.setStack(enums.codeBlocks.javascript, [stack1, stack2, stack3]);
+      log.setStack(codeBlocks.javascript, [stack1, stack2, stack3]);
       log.debug(comment);
       expect($log.debug).toHaveBeenCalledWith('%cjavascript: stackLevel1 -> stackLevel2 -> stackLevel3%c // Lorem ipsum dolor sit amet', 'color: #222;', 'color: #090;');
     });
@@ -127,28 +129,28 @@ describe('Service: log', function() {
   describe('Service: log - behavior in dev environment', function() {
     describe('Service: log.setCodeBlock(string)', function() {
       it('should be able to set every code block from enums.codeblocks', function() {
-        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
-          log.setStack(enums.codeBlocks[codeBlock]);
+        angular.forEach(Object.keys(codeBlocks), function(codeBlock) {
+          log.setStack(codeBlocks[codeBlock]);
           expect($log.error).not.toHaveBeenCalled();
-        }, enums.codeBlocks);
+        }, codeBlocks);
       });
     });
 
     describe('Service: log.setStack(string|array)', function() {
       it('should set the stack if a string is passed', function() {
-        log.setStack(enums.codeBlocks.javascript, stack1);
+        log.setStack(codeBlocks.javascript, stack1);
         log.debug(comment);
         expect($log.debug).toHaveBeenCalledWith('javascript: stackLevel1 // Lorem ipsum dolor sit amet');
       });
 
       it('should set the stack if an array is passed', function() {
-        log.setStack(enums.codeBlocks.javascript, [stack1, stack2, stack3]);
+        log.setStack(codeBlocks.javascript, [stack1, stack2, stack3]);
         log.debug(comment);
         expect($log.debug).toHaveBeenCalledWith('javascript: stackLevel1 -> stackLevel2 -> stackLevel3 // Lorem ipsum dolor sit amet');
       });
 
       it('should log a default message when the stack is set and a code block is defined', function() {
-        log.setStack(enums.codeBlocks.javascript, [stack1, stack2, stack3]);
+        log.setStack(codeBlocks.javascript, [stack1, stack2, stack3]);
         expect($log.debug).toHaveBeenCalledWith('javascript: stackLevel1 -> stackLevel2 -> stackLevel3 -> called');
       });
 
@@ -170,33 +172,33 @@ describe('Service: log', function() {
       });
 
       it('should be able to log a debug without a stack, but with a warning', function() {
-        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
-          log.setStack(enums.codeBlocks[codeBlock]);
+        angular.forEach(Object.keys(codeBlocks), function(codeBlock) {
+          log.setStack(codeBlocks[codeBlock]);
           log.debug(comment);
           expect($log.debug).toHaveBeenCalledWith(codeBlock + ':  // Lorem ipsum dolor sit amet');
-        }, enums.codeBlocks);
+        }, codeBlocks);
       });
 
       it('should be able to log a debug without an object passed', function() {
-        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
-          log.setStack(enums.codeBlocks[codeBlock], stack1);
+        angular.forEach(Object.keys(codeBlocks), function(codeBlock) {
+          log.setStack(codeBlocks[codeBlock], stack1);
           log.debug(comment);
           expect($log.debug).toHaveBeenCalledWith(codeBlock + ': stackLevel1 // Lorem ipsum dolor sit amet');
-        }, enums.codeBlocks);
+        }, codeBlocks);
       });
 
       it('should be able to log a debug with an object passed', function() {
-        angular.forEach(Object.keys(enums.codeBlocks), function(codeBlock) {
-          log.setStack(enums.codeBlocks[codeBlock], stack1);
+        angular.forEach(Object.keys(codeBlocks), function(codeBlock) {
+          log.setStack(codeBlocks[codeBlock], stack1);
           log.debug('testObj', testObj);
           expect($log.debug).toHaveBeenCalledWith(codeBlock + ': stackLevel1 -> testObj = {"value1":"Value 1","int1":1,"value2":"Value 2","int2":2}');
-        }, enums.codeBlocks);
+        }, codeBlocks);
       });
     });
 
     describe('Service: log.warn(string)', function() {
       it('should be able to log a warning', function() {
-        log.setStack(enums.codeBlocks.javascript, stack1);
+        log.setStack(codeBlocks.javascript, stack1);
         log.warn(comment);
         expect($log.warn).toHaveBeenCalledWith('Warning: javascript: stackLevel1 // Lorem ipsum dolor sit amet');
       });
@@ -204,7 +206,7 @@ describe('Service: log', function() {
 
     describe('Service: log.error(string)', function() {
       it('should be able to log an error', function() {
-        log.setStack(enums.codeBlocks.javascript, stack1);
+        log.setStack(codeBlocks.javascript, stack1);
         log.error(comment);
         expect($log.error).toHaveBeenCalledWith('Error: javascript: stackLevel1 // Lorem ipsum dolor sit amet');
       });

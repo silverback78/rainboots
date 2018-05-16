@@ -5,8 +5,16 @@
 
 angular.module('rainboots')
 
-  .controller('NavigationController', ['$location', '$mdSidenav', '$scope', 'config', 'enums', 'log', function ($location, $mdSidenav, $scope, config, enums, log) {
-    log.setStack(enums.codeBlocks.controller, 'NavigationController');
+  /**
+   * Summary. Controller for the navigation directive.
+   *
+   * Description. This controller handles several different aspects of the navigation directive. First, it manages
+   *              an array of menu items to be displayed. It also handles the necessary scripting for opening and
+   *              closing the sidebar nav when displaying in a mobile viewport. Additionaly, it registers an event
+   *              handler on route changes to update the active link.
+   */
+  .controller('NavigationController', ['$location', '$mdSidenav', '$scope', 'enums.codeBlocks', 'config', 'log', function ($location, $mdSidenav, $scope, codeBlocks, config, log) {
+    log.setStack(codeBlocks.controller, 'NavigationController');
 
     var vm = this;
 
@@ -31,23 +39,23 @@ angular.module('rainboots')
     });
 
     vm.loadRoute = function(route) {
-      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'loadRoute(' + route + ')']);
+      log.setStack(codeBlocks.controller, ['NavigationController', 'loadRoute(' + route + ')']);
       $location.path(route);
       vm.closeSidenav();
     };
 
     vm.openSidenav = function() {
-      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'openSidenav()']);
+      log.setStack(codeBlocks.controller, ['NavigationController', 'openSidenav()']);
       $mdSidenav('right').open();
     };
 
     vm.closeSidenav = function() {
-      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'closeSidenav()']);
+      log.setStack(codeBlocks.controller, ['NavigationController', 'closeSidenav()']);
       $mdSidenav('right').close();
     };
 
     vm.isSidenavOpen = function(){
-      log.setStack(enums.codeBlocks.controller, ['NavigationController', 'isSidenavOpen()']);
+      log.setStack(codeBlocks.controller, ['NavigationController', 'isSidenavOpen()']);
       return $mdSidenav('right').isOpen();
     };
   }]);

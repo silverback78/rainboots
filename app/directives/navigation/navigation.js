@@ -2,6 +2,9 @@
 
 angular.module('rainboots')
 
+  /**
+   * Summary. Navigation directive for the top level page navigation.
+   */
   .directive('navigation', [function() {
     return {
       restrict: 'E',

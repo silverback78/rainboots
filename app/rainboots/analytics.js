@@ -9,9 +9,12 @@
 
 angular.module('rainboots')
 
-.run(['config', 'enums', 'log', function(config, enums, log) {
-    if (config.env === enums.env.prod) {
-      log.setStack(enums.codeBlocks.run, ['analytics', 'calling google analytics']);
+/**
+ * Summary.     Google Analytics. Runs only in production mode.
+ */
+.run(['enums.codeBlocks', 'config', 'enums.env', 'log', function(codeBlocks, config, env, log) {
+    if (config.env === env.prod) {
+      log.setStack(codeBlocks.run, ['analytics', 'calling google analytics']);
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

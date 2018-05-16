@@ -5,7 +5,7 @@
 'use strict';
 
 describe('Controller: HomeController', function() {
-  beforeEach(module('rainboots', 'enums-mock', 'config-mock', 'log-mock'));
+  beforeEach(module('rainboots', 'config-mock', 'log-mock'));
 
   var HomeController;
 

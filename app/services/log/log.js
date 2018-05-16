@@ -71,7 +71,7 @@ angular.module('rainboots')
    *
    *              @return {void}
    */
-  .factory('log', ['$log', 'config', 'enums', function($log, config, enums) {
+  .factory('log', ['$log', 'config', 'enums.env', function($log, config, env) {
     var logServiceConfig = {
       setStackCalled: 'called',
       severities: {
@@ -120,7 +120,7 @@ angular.module('rainboots')
     var Stack = '';
 
     var setStack = function(codeBlock, stack) {
-      var logsDisabled = config.env !== enums.env.dev || !config.features.log.enabled;
+      var logsDisabled = config.env !== env.dev || !config.features.log.enabled;
       if (logsDisabled) return {};
 
       var validCodeBlock = logServiceConfig.styles.hasOwnProperty(codeBlock);
@@ -139,7 +139,7 @@ angular.module('rainboots')
     };
 
     var writeLog = function (logSeverity, info, obj) {
-      var logsDisabled = config.env !== enums.env.dev || !config.features.log.enabled;
+      var logsDisabled = config.env !== env.dev || !config.features.log.enabled;
       if (logsDisabled) return {};
 
       var logMessage = [];
