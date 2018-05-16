@@ -24,3 +24,5 @@ The log service allows full stack tracing in a dev environment, and will eventua
 
 ## Unit Testing ([view](https://github.com/silverback78/rainboots/blob/master/app/models/RequestHandler/RequestHandler.spec.js))
 Fully mocked unit testing for immediate developer feedback. Unit test are designed with speed in mind and strive to cover not just every code path, but every type of possibility to minimize the chance of common mistakes such as null references, as well as to ensure stability when refactoring or restructuring code.
+
+![Log example](assets/code-coverage.png)
