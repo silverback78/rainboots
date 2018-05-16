@@ -14,13 +14,13 @@ A site for learning languages.
 * Leverages stateleness to become fully scalable. Instances of the UI and API can be spun up and down as necessary, connections can be interchanged even mid-session without any loss of data or communication.
 * 100% unit test code coverage
 
-## [RequestHandler model](https://github.com/silverback78/rainboots/blob/master/app/models/RequestHandler/RequestHandler.js)
+## RequestHandler model ([view](https://github.com/silverback78/rainboots/blob/master/app/models/RequestHandler/RequestHandler.js))
 This model was created to handle requests during the config lifcecycle stage. Because Angular is not initialized, manual xmlHttpRequest had to be performed. Written as a Javascript class-like model, it can be instantiated and handle multiple requests with individual callbacks, as well as a final callback once all requests have been completed.
 
-## [Log Service](https://github.com/silverback78/rainboots/blob/master/app/services/log/log.js)
+## Log Service ([view](https://github.com/silverback78/rainboots/blob/master/app/services/log/log.js))
 The log service allows full stack tracing in a dev environment, and will eventually allow full stack logging to production environment databases on any error. It simplifies the logging and debugging process, especially in instances where an error has happened in production and no other details are known.
 
 ![Log example](assets/log-example.png)
 
-## [Unit Testing](https://github.com/silverback78/rainboots/blob/master/app/models/RequestHandler/RequestHandler.spec.js)
+## Unit Testing ([view](https://github.com/silverback78/rainboots/blob/master/app/models/RequestHandler/RequestHandler.spec.js))
 Fully mocked unit testing for immediate developer feedback. Unit test are designed with speed in mind and strive to cover not just every code path, but every type of possibility to minimize the chance of common mistakes such as null references, as well as to ensure stability when refactoring or restructuring code.
