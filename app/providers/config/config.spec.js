@@ -1,5 +1,6 @@
 // Specs are allowed leniency with linting
 /* eslint angular/file-name: 0 */
+/* eslint no-magic-numbers: 0 */
 
 'use strict';
 
@@ -130,7 +131,8 @@ describe('Provider: config', function () {
     configProvider.setRemoteConfig(angular.toJson(remoteConfig));
     configProvider.setLocalConfig(angular.toJson(localConfig));
 
-    var actual = configProvider.$get();
+    var actual = configProvider.$get[1]();
+    delete actual.locale;
     expect(actual).toEqual(mergedConfig);
   });
 });

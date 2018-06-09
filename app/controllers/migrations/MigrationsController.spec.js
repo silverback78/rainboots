@@ -22,10 +22,6 @@ describe('Controller: MigrationsController', function () {
       });
     }));
 
-    it('should have a title', function (){
-      expect(MigrationsController.title).toBeDefined();
-    });
-
     it('should request migrations on load', function() {
       $scope.$root.$digest();
       expect(MigrationsController.migrations[0].timestamp).toBe('4/1/2018 @ 2:31 pm');

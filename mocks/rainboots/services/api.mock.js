@@ -26,12 +26,21 @@ var migrationsData = [
   }
 ];
 
+var languageMock = {
+  title: 'title'
+};
+
 angular.module('api-mock', [])
   .factory('api', ['$q', function ($q) {
     return {
       getMigrations: function () {
         return $q(function (resolve) {
           resolve(migrationsData);
+        });
+      },
+      getLanguage: function () {
+        return $q(function (resolve) {
+          resolve(languageMock);
         });
       }
     };

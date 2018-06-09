@@ -1,0 +1,11 @@
+{
+  "title": "Migrations",
+  "pendingMigrations": "Pending Migrations",
+  "appliedMigrations": "Applied Migrations",
+  "applyButton": "Apply",
+  "keyDialogTitle": "Enter Key",
+  "keyDialogContent": "A key is required to apply this migration. Please enter your key.",
+  "keyDialogPlaceholder": "Key",
+  "keyDialogOk": "Apply",
+  "keyDialogCancel": "Cancel"  
+}

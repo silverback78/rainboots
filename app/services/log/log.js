@@ -6,7 +6,7 @@
 angular.module('rainboots')
 
   /**
-   * Summary. Factory for logging information.
+   * Summary.     Factory for logging information.
    *
    * Description. The log factory should log to the console in the development environment, and to the database
    *              in production environment. It should utilize colors when available and coherently display the
@@ -18,19 +18,19 @@ angular.module('rainboots')
    *
    *              // With a single level stack as a string
    *              log.setStack('controller', 'ViewController');
-   *              logs: controller: ViewController -> called
+   *              output: controller: ViewController -> called
    *
    *              // With an array as the stack
    *              log.setStack('controller', ['ViewController', 'getData()', 'api.getData().then()'])
-   *              logs: controller: ViewController -> getData() -> api.getData().then() -> called
+   *              output: controller: ViewController -> getData() -> api.getData().then() -> called
    *
    *              // With the stack set, you can log a comment. You can use debug, warn, or error.
    *              log.debug('Checking to see if data exists');
-   *              logs:  controller: ViewController -> getData() -> api.getData().then() // Checking to see if data exists
+   *              output:  controller: ViewController -> getData() -> api.getData().then() // Checking to see if data exists
    *
    *              // You can pass an object as a second parameter to log data
    *              log.debug('data', data);
-   *              logs:  controller: ViewController -> getData() -> api.getData().then() -> data = { value1: 'One', value2: 'Two' }
+   *              output:  controller: ViewController -> getData() -> api.getData().then() -> data = { value1: 'One', value2: 'Two' }
    *
    * setStack(string, string|array)
    *              sets the current code block and stack for this log. Code block and stack will persist until it is changed.
@@ -72,70 +72,27 @@ angular.module('rainboots')
    *              @return {void}
    */
   .factory('log', ['$log', 'config', 'enums.env', function($log, config, env) {
-    var logServiceConfig = {
-      setStackCalled: 'called',
-      severities: {
-        debug: 'debug',
-        warn: 'warn',
-        error: 'error'
-      },
+    var codeBlock = '';
+    var stack = '';
 
-      errors: {
-        codeBlockError: function(codeBlock) {
-          return 'Error setting code block: ' + codeBlock + ' is not a valid code block.';
-        },
-        nocodeBlock: 'Warning: No code block is set',
-        warn: 'Warning: ',
-        error: 'Error: '
-      },
-
-      separators: {
-        comment: ' // ',
-        data: ' -> ',
-        log: ': ',
-        equals: ' = ',
-        style: '%c'
-      },
-
-      styles: {
-        warn: 'color: #493a05',
-        error: 'color: #f00; font-weight: bold;',
-        comment: 'color: #090;',
-        data: 'color: #222',
-        controller: 'color: #015eb5;',
-        directive: 'color: #31a7d6;',
-        filter: 'color: #18979b;',
-        service: 'color: #ae06ba;',
-        factory: 'color: #ae06ba;',
-        constant: 'font-weight: bold; color: #493a05;',
-        value: 'color: #493a05;',
-        decorator: 'color: #f76f9e;',
-        provider: 'color: #c61930;',
-        run: 'color: #222',
-        javascript: 'color: #222;'
-      }
-    };
-
-    var CodeBlock = '';
-    var Stack = '';
-
-    var setStack = function(codeBlock, stack) {
+    var setStack = function(codeBlockParam, stackParam) {
       var logsDisabled = config.env !== env.dev || !config.features.log.enabled;
-      if (logsDisabled) return {};
+      var validCodeBlock = config.features.log.styles.hasOwnProperty(codeBlockParam);
 
-      var validCodeBlock = logServiceConfig.styles.hasOwnProperty(codeBlock);
+      if (logsDisabled) return {};      
+
       if (validCodeBlock) {
-        CodeBlock = codeBlock;
+        codeBlock = codeBlockParam;
       }
       else {
-        $log.error(logServiceConfig.errors.codeBlockError(codeBlock));
+        $log.error(config.features.log.errors.codeBlockError.replace('{codeBlock}', codeBlockParam));
       }
 
-      Stack = angular.isArray(stack)
-        ? stack
-        : [stack];
+      stack = angular.isArray(stackParam)
+        ? stackParam
+        : [stackParam];
 
-      writeLog(logServiceConfig.severities.debug, logServiceConfig.setStackCalled);
+      writeLog(config.features.log.severities.debug, config.features.log.setStackCalled);
     };
 
     var writeLog = function (logSeverity, info, obj) {
@@ -144,74 +101,74 @@ angular.module('rainboots')
 
       var logMessage = [];
 
-      if (!CodeBlock) {
-        logMessage.push(logServiceConfig.errors.nocodeBlock);
-        logMessage.push(logServiceConfig.separators.log);
-        logMessage.push(angular.isArray(Stack)
-          ? Stack.join(logServiceConfig.separators.data)
+      if (!codeBlock) {
+        logMessage.push(config.features.log.errors.noCodeBlock);
+        logMessage.push(config.features.log.separators.log);
+        logMessage.push(angular.isArray(stack)
+          ? stack.join(config.features.log.separators.data)
           : '');
-        logMessage.push(logServiceConfig.separators.comment, info);
+        logMessage.push(config.features.log.separators.comment, info);
         if (obj) {
-          logMessage.push(logServiceConfig.separators.log, angular.toJson(obj));
+          logMessage.push(config.features.log.separators.log, angular.toJson(obj));
         }
         $log.warn(logMessage.join(''));
         return;
       }
 
       var styleParamPosition = 1;
-      var stylesEnabled = console.debug.length === styleParamPosition && config.features.log.styles;
+      var stylesEnabled = console.debug.length === styleParamPosition && config.features.log.stylesEnabled;
       var infoStyle;
 
-      var stackStyle = logSeverity === logServiceConfig.severities.warn
-        ? logServiceConfig.styles.warn
-        : logSeverity === logServiceConfig.severities.error
-          ? logServiceConfig.styles.error
-          : logServiceConfig.styles[CodeBlock];
+      var stackStyle = logSeverity === config.features.log.severities.warn
+        ? config.features.log.styles.warn
+        : logSeverity === config.features.log.severities.error
+          ? config.features.log.styles.error
+          : config.features.log.styles[codeBlock];
 
-      Stack = Stack || [];
+      stack = stack || [];
 
       logMessage.push(stylesEnabled
-        ? logServiceConfig.separators.style
+        ? config.features.log.separators.style
         : '');
 
-      logMessage.push(logSeverity === logServiceConfig.severities.warn || logSeverity === logServiceConfig.severities.error
-        ? logServiceConfig.errors[logSeverity]
+      logMessage.push(logSeverity === config.features.log.severities.warn || logSeverity === config.features.log.severities.error
+        ? config.features.log.errors[logSeverity]
         : '');
 
-      logMessage.push(CodeBlock, logServiceConfig.separators.log, Stack.join(logServiceConfig.separators.data));
+      logMessage.push(codeBlock, config.features.log.separators.log, stack.join(config.features.log.separators.data));
 
       if (obj) {
-        logMessage.push(logServiceConfig.separators.data, info, logServiceConfig.separators.equals);
+        logMessage.push(config.features.log.separators.data, info, config.features.log.separators.equals);
 
         logMessage.push(stylesEnabled
-          ? logServiceConfig.separators.style
+          ? config.features.log.separators.style
           : '');
 
         logMessage.push(angular.toJson(obj));
-        infoStyle = logSeverity === logServiceConfig.severities.warn
-          ? logServiceConfig.styles.warn
-          : logSeverity === logServiceConfig.severities.error
-            ? logServiceConfig.styles.error
-            : logServiceConfig.styles.data;
+        infoStyle = logSeverity === config.features.log.severities.warn
+          ? config.features.log.styles.warn
+          : logSeverity === config.features.log.severities.error
+            ? config.features.log.styles.error
+            : config.features.log.styles.data;
       }
       else {
         logMessage.push(stylesEnabled
-          ? logServiceConfig.separators.style
+          ? config.features.log.separators.style
           : '');
 
-        logMessage.push(info === logServiceConfig.setStackCalled
-          ? logServiceConfig.separators.data
-          : logServiceConfig.separators.comment
+        logMessage.push(info === config.features.log.setStackCalled
+          ? config.features.log.separators.data
+          : config.features.log.separators.comment
         );
 
         logMessage.push(info);
-        infoStyle = logSeverity === logServiceConfig.severities.warn
-          ? logServiceConfig.styles.warn
-          : logSeverity === logServiceConfig.severities.error
-            ? logServiceConfig.styles.error
-            : info === logServiceConfig.setStackCalled
-              ? logServiceConfig.styles.data
-              : logServiceConfig.styles.comment;
+        infoStyle = logSeverity === config.features.log.severities.warn
+          ? config.features.log.styles.warn
+          : logSeverity === config.features.log.severities.error
+            ? config.features.log.styles.error
+            : info === config.features.log.setStackCalled
+              ? config.features.log.styles.data
+              : config.features.log.styles.comment;
       }
 
       if (stylesEnabled) {
@@ -223,20 +180,20 @@ angular.module('rainboots')
     };
 
     var reset = function() {
-      CodeBlock = '';
-      Stack = '';
+      codeBlock = '';
+      stack = '';
     };
 
     return {
       setStack: setStack,
       debug: function(info, obj) {
-        writeLog(logServiceConfig.severities.debug, info, obj);
+        writeLog(config.features.log.severities.debug, info, obj);
       },
       warn: function(info, obj) {
-        writeLog(logServiceConfig.severities.warn, info, obj);
+        writeLog(config.features.log.severities.warn, info, obj);
       },
       error: function(info, obj) {
-        writeLog(logServiceConfig.severities.error, info, obj);
+        writeLog(config.features.log.severities.error, info, obj);
       },
       reset: function() {
         reset();

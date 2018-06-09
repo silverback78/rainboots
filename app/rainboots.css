@@ -43,3 +43,13 @@ body { position: unset !important; }
   .gutter.escape-gutter-right { margin-right: -15px; }
   .gutter.escape-gutter-top { margin-top: -15px; }
   .gutter.escape-gutter-bottom { margin-bottom: -15px; }
+
+pre.prettyprint {
+  background-color: #fff !important;
+  padding: 15px !important;
+  border: 1px solid #ccc !important;
+}
+
+md-input-container .md-placeholder, md-input-container label:not(.md-no-float):not(.md-container-ignore) {
+  max-width: calc(100% - 3px) !important;
+}

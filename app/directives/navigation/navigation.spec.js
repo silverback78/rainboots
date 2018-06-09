@@ -7,6 +7,7 @@
 describe('Directive: navigation', function() {
   var $compile;
   var $rootScope;
+  var element;
   var log;
 
   beforeEach(module('rainboots', 'templates', 'NavigationController-mock', 'config-mock', 'log-mock'));
@@ -17,7 +18,7 @@ describe('Directive: navigation', function() {
   }));
 
   it('should compile', function() {
-    var element = $compile('<navigation></navigation>')($rootScope);
+    element = $compile('<navigation></navigation>')($rootScope);
     $rootScope.$digest();
     expect(element.html()).toContain('md-nav-bar');
   });

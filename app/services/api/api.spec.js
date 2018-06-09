@@ -53,8 +53,8 @@ describe('Service: api', function () {
     $httpBackend.verifyNoOutstandingRequest();
   });
 
-  it('should POST the migrations from the server', function () {
-    $httpBackend.expectPOST(config.api.migrations).respond(response);
+  it('should GET the migrations from the server', function () {
+    $httpBackend.expectGET(config.api.migrations).respond(response);
 
     migrations = api.getMigrations();
 
@@ -67,12 +67,13 @@ describe('Service: api', function () {
 
   it('should handle errors', function() {
     spyOn(log, 'error');
-    $httpBackend.expectPOST(config.api.migrations).respond(400, {});
+    $httpBackend.expectGET(config.api.migrations).respond(400, {});
     migrations = api.getMigrations();
 
     $httpBackend.flush();
 
     migrations.then();
+
     expect(log.error).toHaveBeenCalledWith('Failed to get migrations');
   });
 });

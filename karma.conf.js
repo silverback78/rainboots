@@ -19,14 +19,17 @@ module.exports = function(config) {
 
       './app/models/**/*.js',
       './app/rainboots/rainboots.js',
+      './mocks/environment.config.js',
 
       './app/providers/**/*.js',
+      './app/filters/**/*.js',
       './app/constants/**/*.js',
       './app/services/**/*.js',
       './app/controllers/**/*.js',
       './app/directives/**/*.js',
 
       './app/controllers/**/*.html',
+      './app/directives/**/*.html',
       './app/icons/**/*.svg'
     ],
 

@@ -45,7 +45,13 @@ angular.module('rainboots')
       return config;
     };
 
-    this.$get = function configFactory() {
+    this.$get = ['$locale', function configFactory($locale) {
+      var locale = $locale
+        ? angular.merge(config.locale, $locale)
+        : config.locale;
+
+      config.locale = locale;
+
       return config;
-    };
+    }];
   });

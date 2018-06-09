@@ -1,3 +1,6 @@
+// Run blocks are allowed go log.
+/* eslint angular/no-run-logic: 0 */
+
 'use strict';
 
 var rainboots = rainboots || {};
@@ -30,3 +33,9 @@ angular.element(document).ready(function () {
 
   requestHandler.sendAll(bootstrap);
 });
+
+angular.module('rainboots')
+  .run(['enums.codeBlocks', 'config', 'log', function(codeBlocks, config, log) {
+    log.setStack(codeBlocks.run, 'bootstrap');
+    log.debug('config', config);
+  }]);

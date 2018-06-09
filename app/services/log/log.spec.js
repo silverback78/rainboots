@@ -95,7 +95,7 @@ describe('Service: log', function() {
       originalFeatures = {
         log: {
           enabled: config.features.log.enabled,
-          styles: config.features.log.styles
+          stylesEnabled: config.features.log.stylesEnabled
         }
       };
 
@@ -107,7 +107,7 @@ describe('Service: log', function() {
 
     afterEach(function() {
       config.features.log.enabled = originalFeatures.log.enabled;
-      config.features.log.styles = originalFeatures.log.styles;
+      config.features.log.stylesEnabled = originalFeatures.log.stylesEnabled;
     });
 
     it('should not log anything if the feature is disabled', function() {
@@ -118,7 +118,7 @@ describe('Service: log', function() {
     });
 
     it('should log with styles if styles are enabled', function() {
-      config.features.log.styles = true;
+      config.features.log.stylesEnabled = true;
       console.debug = [0];
       log.setStack(codeBlocks.javascript, [stack1, stack2, stack3]);
       log.debug(comment);

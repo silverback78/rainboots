@@ -9,7 +9,7 @@ angular.module('rainboots')
     return {
       restrict: 'E',
       scope: {},
-      transclude: true,
+      transclude: false,
       controller: 'NavigationController',
       controllerAs: 'vm',
       templateUrl: 'controllers/navigation/NavigationController.html'

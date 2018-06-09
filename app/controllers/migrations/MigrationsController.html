@@ -1,13 +1,31 @@
 <ng-container ng-if="vm.config.features.migrations.enabled">
-  <h1>{{vm.title}}</h1>
 
-  <md-list>
-    <md-list-item class="md-2-line" ng-repeat="item in vm.migrations">
-      <div class="md-list-item-text">
-        <h3>{{item.version}}</h3>
-        <p>{{item.description}}</p>
-      </div>
-      <md-checkbox></md-checkbox>
-    </md-list-item>
-  </md-list>
+  <md-content>
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="{{vm.lang.pendingMigrations}}">
+        <md-content class="md-padding" spinner="vm.migrationsLoading">
+          <md-content>
+            <md-list>
+              <md-list-item class="md-3-line" ng-repeat="item in vm.migrations.pendingMigrations" ng-if="item.versioned">
+                <div class="md-list-item-text md">
+                  <h3>{{item.version}}</h3>
+                  <h4>{{item.description}}</h4>
+                  <h4 ng-if="!item.versionValid" md-colors="{color:'warn'}">{{item.invalidVersionReason}}</h4>
+                </div>
+                <md-button class="md-secondary" ng-if="item.versionValid" ng-click="vm.applyMigration($event, item.version)">{{vm.lang.applyButton}}</md-button>
+                <md-divider ng-if="!$last"></md-divider>
+              </md-list-item>
+            </md-list>
+          </md-content>
+        </md-content>
+      </md-tab>
+      <md-tab label="{{vm.lang.appliedMigrations}}">
+        <md-content class="md-padding" spinner="vm.migrationsLoading">
+          
+        </md-content>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+  
+  <pre class="prettyprint" ng-if="vm.config.env == vm.env.dev" ng-bind="vm | json"></pre>
 </ng-container>
